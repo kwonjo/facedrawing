@@ -44,7 +44,7 @@ function draw() {
 	// image(capture, 0, 0, 500, 400);// background
 	// rectMode(CENTER);
 	// apple in your eye
-	ellipseMode(CENTER);
+	imageMode(CENTER);
 	var eye1 = map(eyeLeft, 1, 3, img1);
 	image(img1, position.x, position.y, img1.width/4, img1.height/4);
 	// eyes are the window to your soul 
@@ -60,11 +60,13 @@ function draw() {
 	// imageMode(CENTER);
 	// image(img2, position.x + 80, position.y + 200, img2.width/7, img2.height/7);
 	
+	// bite one's tongue
 	ellipseMode(CENTER);
 	var mouth = map(mouthHeight, 1, 5, 0, 255);
 	fill(mouth-120, 0, 0);
 	ellipse(position.x + 120, position.y + 300, 70, 100);
 	
+	// be all ears
 	ellipseMode(CENTER);
 	var brow1 = map(eyebrowLeft, 1, 5, 0, 255);
 	fill(brow1-120, random(255), random(255));
