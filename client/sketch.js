@@ -10,10 +10,21 @@ var eyeLeft = 0;
 var eyeRight = 0;
 var jaw = 0;
 var nostrils = 0;
+var mySound;
+var mySound2;
 var img1;
 var img2;
 var img3;
 var img4;
+var img5;
+var img6;
+
+function preload(){
+	//music
+	soundFormats('mp3'); 
+	mySound = loadSound('sound/shush.mp3');
+	mySound2 = loadSound('sound/playit.mp3');
+  }
 
 function setup() {
   	createCanvas(800, 800);
@@ -21,14 +32,18 @@ function setup() {
 	img1 = loadImage('images/apple.png');
 	img2 = loadImage('images/grindstone.png');
 	img3 = loadImage('images/window.png');
-	img4 = loadImage('images/mirror.png')	
-	// capture = creatCapture(VIDEO);
-	// capture.size(320, 240);
-	// capture.hide();
+	img4 = loadImage('images/mirror.png');
+	img5 = loadImage('images/bug.png');
+	img6 = loadImage('images/loud.png');
+	mySound.setVolume(0.4);
+	mySound2.loop();
+	mySound2.setVolume(0.2);
+	background(255);
 }
 
 function draw() {
-	background(img4);
+	imageMode(CENTER);
+	image(img4, 400, 400, 800, 800)
 	// FACE_OUTLINE : 0 - 16
 	// LEFT_EYEBROW : 17 - 21
 	// RIGHT_EYEBROW : 22 - 26
@@ -38,44 +53,48 @@ function draw() {
 	// RIGHT_EYE : 42 - 47
 	// INNER_MOUTH : 48 - 59
 	// OUTER_MOUTH : 60 - 65
-	// fill(random(0, 255), random(0, 255), random(0, 255));
-	// background video example
-	// imageMode(CORNERS);
-	// image(capture, 0, 0, 500, 400);// background
-	// rectMode(CENTER);
-	// apple in your eye
-	imageMode(CENTER);
+
+	// Apple in your eye
 	var eye1 = map(eyeLeft, 1, 3, img1);
 	image(img1, position.x, position.y, img1.width/4, img1.height/4);
-	// eyes are the window to your soul 
+	// Eyes are the window to your soul 
 	var eye2 = map(eyeRight, 1, 3, img3);
 	image(img3, position.x + 160, position.y, img3.width/10, img3.height/10);
-
+	// Brows speak louder than words
+	var brow = map(scale, 1, 3, img6);
+	image(img6, position.x + 100, position.y-100, img6.width/6, img6.height/10);
 	// Keep your nose to the grindstone 
 	var nose = map(nostrils, 1, 3, img2);
-	image(img2, position.x + 90, position.y + 120, img2.width/8, img2.height/8);
+	image(img2, position.x + 100, position.y + 120, img2.width/8, img2.height/8);
 
-	//If you do build a great experience, customers tell each other about that. Word of mouth is very powerful.
-	// var mouth = map(mouthHeight, 1, 3, img2);
-	// imageMode(CENTER);
-	// image(img2, position.x + 80, position.y + 200, img2.width/7, img2.height/7);
-	
-	// bite one's tongue
-	ellipseMode(CENTER);
-	var mouth = map(mouthHeight, 1, 5, 0, 255);
-	fill(mouth-120, 0, 0);
-	ellipse(position.x + 120, position.y + 300, 70, 100);
-	
-	// be all ears
+	// Cute as a bug's ear
 	ellipseMode(CENTER);
 	var brow1 = map(eyebrowLeft, 1, 5, 0, 255);
-	fill(brow1-120, random(255), random(255));
-	ellipse(position.x - 30 , position.y + 100, 50, 50);
-
-	ellipseMode(CENTER);
+	image(img5, position.x -80, position.y + 100, img2.width/8, img2.height/8);
+	// Box somebody's ears
+	rectMode(CENTER);
 	var brow2 = map(eyebrowRight, 1, 5, 0, 255);
-	fill(brow2-120, random(255), random(255));
-	ellipse(position.x + 280 , position.y + 100, 50, 50);
+	fill(random(255), brow2-120, random(255));
+	rect(position.x + 250 , position.y + 100, 50, 50);
+
+	// Bite one's tongue
+	ellipseMode(CENTER);
+	var mouth = map(mouthHeight, 1, 8, 100, 250);
+	var mouthw = map(mouthWidth, 12, 15, 100, 200);
+	fill(255, 122, 131);
+	ellipse(position.x + 100, position.y + 300, mouthw-10, mouth);
+	// Shush sound
+    if(mouth > 150 && !mySound.isPlaying()){
+        mySound.play();
+        mySound2.pause();
+        fill(0, 0, 0);
+        ellipse(position.x + 100, position.y + 300, 70, 500);
+    }
+    if(mouth <= 150 && mySound.isPlaying()){
+	        mySound.pause();
+	        mySound2.play();
+	    }
+
 }
 
 
@@ -98,10 +117,11 @@ function receiveOsc(address, value) {
 	}
 	else if (address == '/gesture/mouth/width') {
 		mouthWidth = value[0];
+		//console.log(mouthWidth);
 	}
 	else if (address == '/gesture/mouth/height') {
 		mouthHeight = value[0];
-		//print(mouthHeight);
+		//console.log(mouthHeight);
 	}
 	else if (address == '/gesture/eyebrow/left') {
 		eyebrowLeft = value[0];
@@ -115,6 +135,7 @@ function receiveOsc(address, value) {
 	}
 	else if (address == '/gesture/eye/right') {
 		eyeRight = value[0];
+		//console.log(eyeRight);
 	}
 	else if (address == '/gesture/jaw') {
 		jaw = value[0];
