@@ -1,6 +1,6 @@
 # Blog Post 6
 
-### Different Idioms
+### Different Idioms Related to a Face
 1. Apple in your eye
 2. Eyes are the window to your soul 
 3. Brows speak louder than words
