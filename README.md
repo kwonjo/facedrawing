@@ -1,4 +1,4 @@
-# Blog Post 6
+# Project 4
 
 ### Different Idioms Related to a Face
 1. Apple in your eye
